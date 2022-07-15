@@ -11,8 +11,8 @@
 .eqv NINE                   111
 .eqv IN_ADDRESS_HEXA_KEYBOARD   0xFFFF0012         
 .eqv OUT_ADDRESS_HEXA_KEYBOARD  0xFFFF0014
-.eqv LEFT_LED            0xFFFF0010
-.eqv RIGHT_LED          0xFFFF0011
+.eqv LEFT_LED          0xFFFF0011
+.eqv RIGHT_LED            0xFFFF0010
 .data
 header: .asciiz "Welcome to Minh Dang and Minh Khoi Calculator \n"
 inputNumberOne: .asciiz "Please input first number Ex: 0123 \n"
@@ -50,8 +50,8 @@ sb $t3, 0($t1)
 #---------------------------------------------------------
 # Declare variable
 #---------------------------------------------------------
-li $a2, 0 # a2 is used to store left LED value
-li $a3, 0 # a3 is used to store right LED value
+li $a2, 0 # a2 is used to store right LED value
+li $a3, 0 # a3 is used to store left LED value
 li $s1, 0 # store value of number when input
 li $s2, 0 # store value of operation when input
 li $s7, 0 # store value of '=' 
@@ -262,12 +262,12 @@ HandleResult: #get the last two numbers
   mfhi $t6
 
 ShowResultOnLeds:
-  li $t2,LEFT_LED   # hien thi den LED trai
-  add $s0,$zero,$t7 # truyen bien left
+  li $t2,RIGHT_LED   # set light on LED right
+  add $s0,$zero,$t7 
   jal HandleShow
   nop
-  li $t2,RIGHT_LED  # hien thi den LED phai
-  add $s0,$zero,$t6 # truyen bien right
+  li $t2,LEFT_LED  # set light on LED left
+  add $s0,$zero,$t6 
   jal HandleShow
   nop
   j endMain
@@ -306,27 +306,10 @@ HandleShow:
  # Processing
  #--------------------------------------------------------
 IntSR:
-  addi $sp,$sp,4    # Save $ra because we may change it later
-  sw $ra,0($sp)
-  addi $sp,$sp,4    # Save $ra because we may change it later
-  sw  $at,0($sp)
-  addi $sp,$sp,4    # Save $ra because we may change it later
-  sw $v0,0($sp)
-  addi $sp,$sp,4    # Save $a0, because we may change it later
-  sw $a0,0($sp)
-  addi $sp,$sp,4    # Save $t1, because we may change it later
-  sw $t1,0($sp)
-  addi $sp,$sp,4    # Save $t3, because we may change it later
-  sw $t3,0($sp)
-  addi $sp,$sp,4 
-  sw $t0,0($sp)
 #--------------------------------------------------------
 # Process
 #--------------------------------------------------------
   addi $t0,$t0,1
-#   li $v0, 1
-# add $a0, $t0, 0
-# syscall
   jal handleInInterruptRowOne
   nop
   jal handleInInterruptRowTwo
@@ -347,23 +330,16 @@ return: eret
 # Restore variable
 #--------------------------------------------------------
 recoverStack:
-  addi $sp,$sp,-4
-  addi $sp,$sp,-4
-  addi $sp,$sp,-4
-  addi $sp,$sp,-4
-  addi $sp,$sp,-4
-  addi $sp,$sp,-4
-
 
 # ------ 1 ------
 handleInInterruptRowOne:
   addi $sp,$sp,4
   sw $ra,0($sp) 
   li $t1,IN_ADDRESS_HEXA_KEYBOARD
-  li $t3,0x81     # Kich hoat interrupt, cho phep bam phim o hang 2
+  li $t3,0x81     # Kich hoat interrupt, cho phep bam phim o hang 1
   sb $t3,0($t1)
   li $t1,OUT_ADDRESS_HEXA_KEYBOARD
-  lb $t3,0($t1)   # Nhan byte the hien vi tri cua phim duoc bam trong hang 2
+  lb $t3,0($t1)   # Nhan byte the hien vi tri cua phim duoc bam trong hang 1
   case_interrupt_0:
     li $t5,0x11
     bne $t3, $t5 ,case_interrupt_1  # case 0x11
@@ -397,12 +373,12 @@ handleInInterruptRowOne:
     add $s1,$s1,$a2   # factor=factor*10+left
     j showInInterruptOne
   showInInterruptOne:
-    li $t2,LEFT_LED   # hien thi den LED trai
-    add $s0,$zero,$a2 # truyen bien left
+    li $t2,RIGHT_LED   # set light on LED right
+    add $s0,$zero,$a2 # 
     jal displayLED
     nop
-    li $t2,RIGHT_LED  # hien thi den LED phai
-    add $s0,$zero,$a3 # truyen bien right
+    li $t2,LEFT_LED  # set light on LED left
+    add $s0,$zero,$a3 
     jal displayLED
     nop  
   getInterruptOne:
@@ -452,12 +428,12 @@ handleInInterruptRowTwo:
     add $s1,$s1,$a2   # factor=factor*10+left
     j showInInterruptTwo
   showInInterruptTwo:
-    li $t2,LEFT_LED   # hien thi den LED trai
-    add $s0,$zero,$a2 # truyen bien left
+    li $t2,RIGHT_LED   # set light on LED right
+    add $s0,$zero,$a2 # 
     jal displayLED
     nop
-    li $t2,RIGHT_LED  # hien thi den LED phai
-    add $s0,$zero,$a3 # truyen bien right
+    li $t2,LEFT_LED  # set light on LED left
+    add $s0,$zero,$a3 
     jal displayLED
     nop  
   getInterruptTwo:
@@ -502,12 +478,12 @@ handleInInterruptRowThree:
     addi $s2, $0, 2  
     j getInterruptThree
   showInInterruptThree:
-    li $t2,LEFT_LED   # hien thi den LED trai
-    add $s0,$zero,$a2 # truyen bien left
+    li $t2,RIGHT_LED   # set light on LED right
+    add $s0,$zero,$a2 # 
     jal displayLED
     nop
-    li $t2,RIGHT_LED  # hien thi den LED phai
-    add $s0,$zero,$a3 # truyen bien right
+    li $t2,LEFT_LED  # set light on LED left
+    add $s0,$zero,$a3 
     jal displayLED
     nop  
   getInterruptThree:
