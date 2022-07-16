@@ -13,8 +13,8 @@ line10:.asciiz "*22222*******222222*  *11111*             *3333333333333* \n"
 line11:.asciiz "*2222222222222222*    *11111*              *************  \n"
 line12:.asciiz "***************       *11111*                             \n"
 line13:.asciiz "      ---              *1111**                            \n"
-line14:.asciiz "    ( o o )             *1111****   *****                 \n"
-line15:.asciiz "    (   > )              **111111***111*                  \n"
+line14:.asciiz "    / o o \\             *1111****   *****                 \n"
+line15:.asciiz "    \\   > /              **111111***111*                  \n"
 line16:.asciiz "     -----                 ***********    dce.hust.edu.vn \n"
 #Menu
 header: .asciiz "Welcome to Minh Dang and Minh Khoi Projects\n"
@@ -203,7 +203,7 @@ handleChangeColor:
           add $a0, $0, $t4
           sb $a0, 0($t2)
       continueD:
-      ble $t1, 21, continueC
+      ble $t1, 21, continueC 
       conditionChangeColorC:
         sge $a2,$a1, 48
         sle $a3, $a1, 57
