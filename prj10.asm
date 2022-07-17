@@ -20,9 +20,8 @@ thanks: .asciiz "Thanks for using this calculator \n"
 error: .asciiz "Error happened please try again! \n"
 arrHexLeds: .word 63, 6, 91, 79, 102, 109, 125, 7, 127, 111
 nextline: .asciiz "\n"
-runhere: .asciiz "Run here"
-runhere1: .asciiz "RUnhere 1"
-runhere2: .asciiz "RUn here 2"
+runAgain: .asciiz "Do you want to calculate again ? (Enter 1 if you want to calculate again) \n"
+
 .text
 welcome:
   li $v0, 4
@@ -147,6 +146,7 @@ getOperator:
       syscall
       j AlertEqual
     case_div:
+      bne $s2, 4 , case_error_handler
       la $a0, chooseDiv
       li $v0, 4
       syscall
@@ -251,6 +251,10 @@ ShowResultOnLeds:
   j endMain
 
 endMain:
+  li $v0, 51
+  la $a0, runAgain
+  syscall
+  beq $a0, 1, welcome
   la $a0, end
   li $v0, 4     
   syscall
