@@ -1,14 +1,3 @@
-  
-.eqv ZERO                   63
-.eqv ONE                    6
-.eqv TWO                    91
-.eqv THREE                  79
-.eqv FOUR                   102
-.eqv FIVE                   109
-.eqv SIX                    125
-.eqv SEVEN                  7
-.eqv EIGHT                  127
-.eqv NINE                   111
 .eqv IN_ADDRESS_HEXA_KEYBOARD   0xFFFF0012         
 .eqv OUT_ADDRESS_HEXA_KEYBOARD  0xFFFF0014
 .eqv LEFT_LED          0xFFFF0011
@@ -322,7 +311,7 @@ recoverStack:
 
 # ------ 1 ------
 handleInInterruptRowOne:
-  addi $sp,$sp,4
+  subu $sp,$sp,4
   sw $ra,0($sp) 
   li $t1,IN_ADDRESS_HEXA_KEYBOARD
   li $t3,0x81     # Allow choose row 1
@@ -377,7 +366,7 @@ handleInInterruptRowOne:
 
 # ------ 2 ------
 handleInInterruptRowTwo:
-  addi $sp,$sp,4
+  subu $sp,$sp,4
   sw $ra,0($sp) 
   li $t1,IN_ADDRESS_HEXA_KEYBOARD
   li $t3,0x82     # Allow choose row 2
@@ -433,7 +422,7 @@ handleInInterruptRowTwo:
 
 # ------ 3 ------
 handleInInterruptRowThree:
-  addi $sp,$sp,4
+  subu $sp,$sp,4
   sw $ra,0($sp) 
   li $t1,IN_ADDRESS_HEXA_KEYBOARD
   li $t3,0x84     # Allow choose row 2
@@ -482,7 +471,7 @@ handleInInterruptRowThree:
 
 # ------ 4 ------
 handleInInterruptRowFour:
-  addi $sp,$sp,4
+  subu $sp,$sp,4
   sw $ra,0($sp) 
   li $t1,IN_ADDRESS_HEXA_KEYBOARD
   li $t3,0x88     # Allow choose row 2
@@ -510,7 +499,7 @@ handleInInterruptRowFour:
     jr $ra
 
 displayLED: 
-  addi $sp,$sp,4
+  subu $sp,$sp,4
   sw $ra,0($sp)   # save $ra
 handleLedInterrupt:    
   la $k0, arrHexLeds
@@ -531,7 +520,7 @@ resetInterrupt:
   li $k1, 0 #reset
 displayLEDrt: 
   lw $ra,0($sp)
-  addi $sp,$sp,-4
+  addi $sp,$sp,4
   jr $ra
 
 
