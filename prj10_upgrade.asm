@@ -171,10 +171,10 @@ AlertEqual:
 LoopEqual:
   beq $s7, 1 ,getEqual
   nop
-  nop
   b LoopEqual
 
 getEqual:
+  bne $s7, 1, case_error_handler
   switchEqualOperator:
     case_sum_handler: 
       bne $s2, 1 , case_sub_handler
