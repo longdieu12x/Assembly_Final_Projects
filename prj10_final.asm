@@ -315,6 +315,7 @@ endMain:
   la $v0, 10   
   syscall
 
+# show two last digits of results to LEDs
 HandleShow:
   la $k0, arrHexLeds
   la $k1, nextline
@@ -386,7 +387,7 @@ handleInInterruptRowOne:
     j showInInterruptOne
   case_interrupt_1:
     li $t5,0x21
-    bne $t3, $t5 ,case_interrupt_2  # case 0x12
+    bne $t3, $t5 ,case_interrupt_2  # case 0x21
     addi $a3,$a2,0    # store left value
     addi $a2,$zero,1  # set right value
     mul $s1,$s1,10
@@ -394,7 +395,7 @@ handleInInterruptRowOne:
     j showInInterruptOne
   case_interrupt_2:
     li $t5,0x41
-    bne $t3, $t5 ,case_interrupt_3  # case 0x13
+    bne $t3, $t5 ,case_interrupt_3  # case 0x41
     addi $a3,$a2,0    # store left value
     addi $a2,$zero,2  # set right value
     mul $s1,$s1,10
@@ -402,7 +403,7 @@ handleInInterruptRowOne:
     j showInInterruptOne
   case_interrupt_3:
     li $t5, 0xffffff81
-    bne $t3, $t5 , getInterruptOne  # case 0x14
+    bne $t3, $t5 , getInterruptOne  # case 0xffffff81
     addi $a3,$a2,0    # store left value
     addi $a2,$zero,3  # set right value
     mul $s1,$s1,10
@@ -433,7 +434,7 @@ handleInInterruptRowTwo:
   lb $t3,0($t1)   # Load value of row 2
   case_interrupt_4:
     li $t5,0x12
-    bne $t3, $t5 ,case_interrupt_5  # case 0x11
+    bne $t3, $t5 ,case_interrupt_5  # case 0x12
     addi $a3,$a2,0    # store left value
     addi $a2,$zero,4  # set right value
     mul $s1,$s1,10
@@ -441,7 +442,7 @@ handleInInterruptRowTwo:
     j showInInterruptTwo
   case_interrupt_5:
     li $t5,0x22
-    bne $t3, $t5 ,case_interrupt_6  # case 0x12
+    bne $t3, $t5 ,case_interrupt_6  # case 0x22
     addi $a3,$a2,0    # store left value
     addi $a2,$zero,5  # set right value
     mul $s1,$s1,10
@@ -449,7 +450,7 @@ handleInInterruptRowTwo:
     j showInInterruptTwo
   case_interrupt_6:
     li $t5,0x42
-    bne $t3, $t5 ,case_interrupt_7  # case 0x13
+    bne $t3, $t5 ,case_interrupt_7  # case 0x42
     addi $a3,$a2,0    # store left value
     addi $a2,$zero,6  # set right value
     mul $s1,$s1,10
@@ -457,7 +458,7 @@ handleInInterruptRowTwo:
     j showInInterruptTwo
   case_interrupt_7:
     li $t5, 0xffffff82
-    bne $t3, $t5 , getInterruptTwo  # case 0x14
+    bne $t3, $t5 , getInterruptTwo  # case 0xffffff82
     addi $a3,$a2,0    # store left value
     addi $a2,$zero,7  # set right value
     mul $s1,$s1,10
@@ -489,7 +490,7 @@ handleInInterruptRowThree:
   lb $t3,0($t1)   # Load value of row 2
   case_interrupt_8:
     li $t5,0x00000014
-    bne $t3, $t5 ,case_interrupt_9  # case 0x11
+    bne $t3, $t5 ,case_interrupt_9  # case 0x14
     addi $a3,$a2,0    # store left value
     addi $a2,$zero,8  # set right value
     mul $s1,$s1,10
@@ -497,7 +498,7 @@ handleInInterruptRowThree:
     j showInInterruptThree
   case_interrupt_9:
     li $t5,0x00000024
-    bne $t3, $t5 ,case_interrupt_a  # case 0x12
+    bne $t3, $t5 ,case_interrupt_a  # case 0x24
     addi $a3,$a2,0    # store left value
     addi $a2,$zero,9  # set right value
     mul $s1,$s1,10
@@ -505,13 +506,13 @@ handleInInterruptRowThree:
     j showInInterruptThree
   case_interrupt_a:
     li $t5,0x44
-    bne $t3, $t5 ,case_interrupt_b  # case 0x13
-    addi $s2, $0, 1
+    bne $t3, $t5 ,case_interrupt_b  # case 0x44
+    addi $s2, $0, 1 # set addition flag
     j getInterruptThree
   case_interrupt_b:
     li $t5, 0xffffff84
-    bne $t3, $t5 , getInterruptThree  # case 0x14
-    addi $s2, $0, 2  
+    bne $t3, $t5 , getInterruptThree  # case 0xffffff84
+    addi $s2, $0, 2  # set subtraction flag
     j getInterruptThree
   showInInterruptThree:
     li $t2,RIGHT_LED   # set light on LED right
@@ -539,22 +540,22 @@ handleInInterruptRowFour:
   case_interrupt_c:
     li $t5,0x18
     bne $t3, $t5 ,case_interrupt_d  # case 0x13
-    addi $s2, $0, 3
+    addi $s2, $0, 3 # set multiplication flag
     j getInterruptFour
   case_interrupt_d:
     li $t5, 0x28
     bne $t3, $t5 , case_interrupt_e  # case 0x14
-    addi $s2, $0, 4  
+    addi $s2, $0, 4   # set division flag
     j getInterruptFour
   case_interrupt_e:
     li $t5, 0x48
     bne $t3, $t5 , case_interrupt_f  # case 0x14
-    addi $s2, $0, 5  
+    addi $s2, $0, 5   # set power flag
     j getInterruptFour
   case_interrupt_f:
     li $t5, 0xffffff88 
     bne $t3, $t5 , getInterruptFour # case 0x14
-    addi $s7, $0, 1  
+    addi $s7, $0, 1   # set equal flag
     li $v0, 4
     la $a0, choosedPrint
     syscall

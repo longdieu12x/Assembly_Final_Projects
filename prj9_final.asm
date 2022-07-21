@@ -100,7 +100,7 @@ handleOption2:
       beq $t1, $s3, loopOption2 #end col
       lb $a0, 0($t2)
       sge $k0, $a0, 48 # 0 in ascii
-      sle $k1, $a0, 57 # 0 in ascii
+      sle $k1, $a0, 57 # 9 in ascii
       and $t3, $k0, $k1
       bne $t3, $0, replaceCharacterWithSpace
       j notReplace
@@ -142,7 +142,7 @@ handleOption3:
     syscall
 
     li $v0, 4 
-    la $a0, 0($t2) #E
+    la $a0, 0($t2) #D
     syscall
 
     li $v0, 4 
@@ -249,12 +249,12 @@ handleOption5:
     printCharacterCol5:
       beq $t1, $s3, loopOption5 #end col
       lb $a0, 0($t2)
-      bne $a0, 111, changeMouth # 0 in ascii
-      addi $a0, $0, 88
+      bne $a0, 111, changeMouth # o in ascii
+      addi $a0, $0, 88 # change to X
       sb $a0, 0($t2)
       changeMouth:
-      bne $a0, 62, notChangeOption5 # 0 in ascii
-      addi $a0, $0, 79
+      bne $a0, 62, notChangeOption5 # > in ascii
+      addi $a0, $0, 79 # change to o
       sb $a0, 0($t2)
       notChangeOption5:
       li $v0, 11
